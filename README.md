@@ -3,15 +3,13 @@
 | Column             | Type   | Options                   |
 | ------------------ | ------ | ------------------------- |
 | email              | string | null: false, unique: true |
-| password           | string | null: false               |
+| encrypted_password | string | null: false               |
 | nickname           | string | null: false               |
 | family_name        | string | null: false               |
 | first_name         | string | null: false               |
 | family_name_kana   | string | null: false               |
 | first_name_kana    | string | null: false               |
-| birth_year         | text   | null: false               |
-| birth_month        | text   | null: false               |
-| birth_day          | date   | null: false               |
+| birthday           | date   | null: false               |
 
 ### Association
 - has_many :items
@@ -22,17 +20,17 @@
 | Column             | Type      | Options                        |
 | ------------------ | --------- | ------------------------------ |
 | name               | text      | null: false                    |
-| image              | string    | null: false                    |
 | text               | text      | null: false                    |
-| category           | string    | null: false                    |
-| situation          | string    | null: false                    |
-| delivery_charge    | string    | null: false                    |
-| prefectures        | string    | null: false                    |
-| shipping_date      | string    | null: false                    |
+| category_id        | integer   | null: false                    |
+| situation_id       | integer   | null: false                    |
+| delivery_charge_id | integer   | null: false                    |
+| prefectures_id     | integer   | null: false                    |
+| shipping_date_id   | integer   | null: false                    |
 | price              | integer   | null: false                    |
 | user               | reference | null: false, foreign_key: true |
 
 ### Association
+- belongs_to :user
 - has_one :destination
 
 ## destinations テーブル
@@ -43,6 +41,7 @@
 | item               | reference | null: false, foreign_key: true  |
 
 ### Association
+- belongs_to :user
 - belongs_to :item
 - has_one :purchase
 
@@ -50,12 +49,12 @@
 
 | Column             | Type       | Options                        |
 | ------------------ | ---------- | ------------------------------ |
-| post_code          | integer    | null: false                    |
-| prefectures        | string     | null: false                    |
+| post_code          | string     | null: false                    |
+| prefectures_id     | integer    | null: false                    |
 | municipalities     | string     | null: false                    |
 | address            | string     | null: false                    |
 | building           | string     |                                |
-| phone_number       | integer    | null: false                    |
+| phone_number       | string     | null: false                    |
 | destination        | reference  | null: false, foreign_key: true |
 
 ### Association
