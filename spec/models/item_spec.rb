@@ -61,27 +61,27 @@ RSpec.describe Item, type: :model do
       it "priceが300未満では出品できない" do
         @item.price = 299
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price can't be blank")
+        expect(@item.errors.full_messages).to include("Price Out of setting range")
       end
       it "priceが9999999以上では出品できない" do
         @item.price = 10_000_000
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price can't be blank")
+        expect(@item.errors.full_messages).to include("Price Out of setting range")
       end
       it "priceが全角数字では出品できない" do
         @item.price = "１００００"
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price can't be blank")
+        expect(@item.errors.full_messages).to include("Price Out of setting range", "Price Half-width number")
       end
       it "priceが半角英字では出品できない" do
         @item.price = "sample"
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price can't be blank")
+        expect(@item.errors.full_messages).to include("Price Out of setting range", "Price Half-width number")
       end
       it "priceが半角英数字混合では出品できない" do
         @item.price = "sample1000"
         @item.valid?
-        expect(@item.errors.full_messages).to include("Price can't be blank")
+        expect(@item.errors.full_messages).to include("Price Out of setting range", "Price Half-width number")
       end
       it "userが紐付いていないと出品できない" do
         @item.user = nil
