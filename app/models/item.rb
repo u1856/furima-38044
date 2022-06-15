@@ -16,7 +16,7 @@ class Item < ApplicationRecord
   validates :category_id, numericality: { other_than: 1 , message: "can't be blank" } 
   validates :situation_id, numericality: { other_than: 1 , message: "can't be blank" } 
   validates :delivery_charge_id, numericality: { other_than: 1 , message: "can't be blank" } 
-  validates :prefectures_id, numericality: { other_than: 1 , message: "can't be blank" } 
+  validates :prefecture_id, numericality: { other_than: 1 , message: "can't be blank" } 
   validates :shipping_date_id, numericality: { other_than: 1 , message: "can't be blank" } 
 
 end
