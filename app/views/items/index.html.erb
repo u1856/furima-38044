@@ -126,19 +126,22 @@
     <div class="subtitle" >
       新規投稿商品
     </div>
+
+    
     <ul class='item-lists'>
+    <% if @items.present? %>
     <% @items.each do |item| %>
       <li class='list'>
         <%= link_to "#" do %>
         <div class='item-img-content'>
           <%= image_tag "item-sample.png", class: "item-img" %>
-
-          <% if @item.present? %>
+        <%# 商品が売れている場合は、sold outを表示しましょう %>
+        <%#<% if @item.present? %>
           <div class='sold-out'>
             <span>Sold Out!!</span>
           </div>
-          <% end %>
-
+         <%#<% end %>
+        <%# //商品が売れている場合は、sold outを表示しましょう %>
         </div>
         <div class='item-info'>
           <h3 class='item-name'>
@@ -156,6 +159,7 @@
       </li>
     <% end %>
       <%# 商品がない場合は以下のダミー商品が表示されるようにしましょう %>
+    <% else %>
       <%# 商品がある場合は表示されないようにしましょう %>
       <li class='list'>
         <%= link_to '#' do %>
@@ -176,6 +180,7 @@
       </li>
       <%# //商品がある場合は表示されないようにしましょう %>
       <%# //商品がない場合は以下のダミー商品が表示されるようにしましょう %>
+    <% end %>
     </ul>
   </div>
   <%# /商品一覧 %>
