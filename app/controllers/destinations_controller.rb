@@ -1,13 +1,13 @@
 class DestinationsController < ApplicationController
-  before_action :authenticate_user!, except: :index
+  before_action :authenticate_user!
+  before_action :non_purchased_item, only: [:index, :create]
 
   def index
-    @item = Item.find(params[:item_id])
     @destination_purchase = DestinationPurchase.new
+    
   end
 
   def create
-    @item = Item.find(params[:item_id])
     @destination_purchase = DestinationPurchase.new(destination_params)
     if @destination_purchase.valid?
       Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
@@ -27,6 +27,13 @@ class DestinationsController < ApplicationController
 
   def destination_params
     params.require(:destination_purchase).permit(:post_code, :prefecture_id, :municipalities, :address, :building, :phone_number).merge(user_id: current_user.id, item_id: @item.id, token: params[:token])
+  end
+
+  def non_purchased_item
+    @item = Item.find(params[:item_id])
+    if current_user.id == @item.user_id || @item.destination.present?
+      redirect_to root_path
+    end
   end
 
 end
