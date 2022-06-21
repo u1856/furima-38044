@@ -2,12 +2,18 @@ require 'rails_helper'
 
 RSpec.describe DestinationPurchase, type: :model do
   before do
-    @destination_purchase = FactoryBot.build(:destination_purchase)
+    @user = FactoryBot.create(:user)
+    @item = FactoryBot.create(:item)
+    @destination_purchase = FactoryBot.build(:destination_purchase, user_id: @user.id, item_id: @item.id)
   end
 
   describe '商品購入' do
     context '購入できる場合' do
       it '必須項目が入力されていれば購入できる' do
+        expect(@destination_purchase).to be_valid
+      end
+      it '建物名は空でも保存できる' do
+        @destination_purchase.building = nil
         expect(@destination_purchase).to be_valid
       end
     end
@@ -43,8 +49,13 @@ RSpec.describe DestinationPurchase, type: :model do
         @destination_purchase.valid?
         expect(@destination_purchase.errors.full_messages). to include ( "Phone number can't be blank")
       end
-      it 'phone_numberは10桁以上11桁以内の半角数値のみ保存可能' do
-        @destination_purchase.phone_number = '090-1234-5678'
+      it 'phone_numberは9桁未満では保存できない' do
+        @destination_purchase.phone_number = '09012345'
+        @destination_purchase.valid?
+        expect(@destination_purchase.errors.full_messages). to include ( "Phone number Input only number")
+      end
+      it 'phone_numberは12桁を超えると保存できない' do
+        @destination_purchase.phone_number = '090123456789'
         @destination_purchase.valid?
         expect(@destination_purchase.errors.full_messages). to include ( "Phone number Input only number")
       end
