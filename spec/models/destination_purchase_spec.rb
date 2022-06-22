@@ -5,6 +5,7 @@ RSpec.describe DestinationPurchase, type: :model do
     @user = FactoryBot.create(:user)
     @item = FactoryBot.create(:item)
     @destination_purchase = FactoryBot.build(:destination_purchase, user_id: @user.id, item_id: @item.id)
+    sleep(1)
   end
 
   describe '商品購入' do
@@ -19,6 +20,16 @@ RSpec.describe DestinationPurchase, type: :model do
     end
 
     context '購入できない場合' do
+      it 'userが紐付いていなければ購入できない' do
+        @destination_purchase.user_id = nil
+        @destination_purchase.valid?
+        expect(@destination_purchase.errors.full_messages).to include("User can't be blank")
+      end
+      it 'itemが紐付いていなければ購入できない' do
+        @destination_purchase.item_id = nil
+        @destination_purchase.valid?
+        expect(@destination_purchase.errors.full_messages).to include("Item can't be blank")
+      end
       it '配送先の情報としてpost_codeが必須' do
         @destination_purchase.post_code = nil
         @destination_purchase.valid?
@@ -49,15 +60,20 @@ RSpec.describe DestinationPurchase, type: :model do
         @destination_purchase.valid?
         expect(@destination_purchase.errors.full_messages). to include ( "Phone number can't be blank")
       end
+      it 'phone_numberに半角数字以外が含まれている場合は購入できない' do
+        @destination_purchase.phone_number = 'あああ'
+        @destination_purchase.valid?
+        expect(@destination_purchase.errors.full_messages). to include ( "Phone number is invalid")
+      end
       it 'phone_numberは9桁未満では保存できない' do
         @destination_purchase.phone_number = '09012345'
         @destination_purchase.valid?
-        expect(@destination_purchase.errors.full_messages). to include ( "Phone number Input only number")
+        expect(@destination_purchase.errors.full_messages). to include ( "Phone number is invalid")
       end
       it 'phone_numberは12桁を超えると保存できない' do
         @destination_purchase.phone_number = '090123456789'
         @destination_purchase.valid?
-        expect(@destination_purchase.errors.full_messages). to include ( "Phone number Input only number")
+        expect(@destination_purchase.errors.full_messages). to include ( "Phone number is invalid")
       end
       it "tokenが空では登録できない" do
         @destination_purchase.token = nil

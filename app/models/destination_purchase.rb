@@ -1,7 +1,7 @@
 class DestinationPurchase
   include ActiveModel::Model
   attr_accessor :user_id, :item_id, :post_code, :prefecture_id, :municipalities, :address, :building, :phone_number, :destination_id, :token
-  
+
   with_options presence: true do
     validates :user_id
     validates :item_id
@@ -9,7 +9,7 @@ class DestinationPurchase
     validates :prefecture_id, numericality:  {other_than: 0, message: "can't be blank"}
     validates :municipalities
     validates :address
-    validates :phone_number, format: {with: /\A\d{10}\z|\A\d{11}\z/ , message: "Input only number"}
+    validates :phone_number, format: {with: /\A\d{10}\z|\A\d{11}\z/ , message: "is invalid"}
     validates :token
   end
 
