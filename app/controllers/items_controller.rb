@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_item, only: [:show, :edit, :update, :destroy]
+  before_action :move_to_item, only: [:edit, :destroy]
   
   def index
     @items = Item.order(created_at: :desc)
@@ -24,7 +25,7 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    unless current_user.id == @item.user_id
+    if @item.destination.present?
       redirect_to action: :index
     end
   end
@@ -38,13 +39,11 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    if user_signed_in? && current_user.id == @item.user_id
       if @item.destroy
         redirect_to root_path
       else
         render :show
       end
-    end
   end
 
   private
@@ -55,6 +54,12 @@ class ItemsController < ApplicationController
 
   def find_item
     @item = Item.find(params[:id])
+  end
+
+  def move_to_item
+    if current_user.id == @item.user_id
+      redirect_to action: :index
+    end
   end
 
 end
